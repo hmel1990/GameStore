@@ -60,12 +60,15 @@ namespace GameStore.Repositories
         public void UpdateAll(Product[] products)
         {
             Dictionary<int, Product> data = products.ToDictionary(e => e.Id);
-            IEnumerable<Product> baseline = _context.Products.Where(e => data.Keys.Contains(e.Id));
+            IEnumerable<Product> baseline = _context.Products.Where(e => data.Keys.Contains(e.Id)).ToList();
+
             foreach (Product product in baseline)
             {
                 Product requestProduct = data[product.Id];
                 product.Name = requestProduct.Name;
-                product.Category = requestProduct.Category;
+                product.CategoryId = requestProduct.CategoryId;
+                product.Category = _context.Categories.Find(requestProduct.CategoryId);
+
                 product.RetailPrice = requestProduct.RetailPrice;
                 product.PurchasePrice = requestProduct.PurchasePrice;
             }

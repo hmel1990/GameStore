@@ -26,10 +26,10 @@
             </div>
             <div class="col">
                 @p.Category?.Name
-				<select class="form-control" name="Products[@i].Category">
+                <select class="form-control" name="Products[@i].CategoryId">
 					@foreach (Category category in ViewBag.Categories)
 					{
-                        <option selected="@(p.Category?.Id == category.Id)" value="@category.Id">@category.Name</option>
+                        <option selected="@(category.Id == p.Category?.Id)" value="@category.Id">@category.Name</option>
 					}
 				</select>
             </div>
