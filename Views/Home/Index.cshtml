@@ -1,0 +1,131 @@
+﻿@* @{
+    ViewData["Title"] = "Все товары";
+}
+@model IQueryable<Product>
+
+<h3 class="p-2 bg-primary text-white text-center">Товары</h3>
+<div class="container">
+    <div class="row">
+        <div class="col fw-bold">Название</div>
+        <div class="col fw-bold">Категория</div>
+        <div class="col fw-bold">Закупочная цена</div>
+        <div class="col fw-bold">Розничная цена</div>
+        <div class="col"></div>
+    </div>
+    <form asp-action="AddProduct" asp-controller="Home" method="post">
+        <div class="row">
+            <div class="col">
+                <input name="Name" class="form-control" required />
+            </div>
+            <div class="col">
+                <input name="Category" class="form-control" required />
+            </div>
+            <div class="col">
+                <input name="PurchasePrice" class="form-control" required />
+            </div>
+            <div class="col">
+                <input name="RetailPrice" class="form-control" required />
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-primary">Добавить</button>
+            </div>
+        </div>
+    </form>
+    @if (Model.Count() == 0)
+    {
+        <div class="row">
+            <div class="col text-center p-2">Нет данных</div>
+        </div>
+    }
+    else
+    {
+        @foreach (Product product in Model)
+        {
+            <div class="row р-2">
+                <div class="col">@product.Name</div>
+                <div class="col">@product.Category</div>
+                <div class="col text-right">@product.PurchasePrice</div>
+                <div class="col text-right">@product.RetailPrice</div>
+                <div class="col">
+                    <a asp-action="UpdateProduct" asp-route-id="@product.Id" class="btn btn-outline-primary">Редактировать</a>
+
+                </div>
+            </div>
+        }
+    }
+</div> *@
+
+@model IQueryable<Product>
+
+<h3 class="p-2 bg-primary text-white text-center">Товары</h3>
+<div class="container">
+    @if (ViewBag.UpdateAll != true)
+    {
+        <div class="row">
+            <div class="col fw-bold">Название</div>
+            <div class="col fw-bold">Категория</div>
+            <div class="col fw-bold">Закупочная цена</div>
+            <div class="col fw-bold">Розничная цена</div>
+            <div class="col"></div>
+        </div>
+        <form asp-action="AddProduct" asp-controller="Home" method="post">
+            <div class="row">
+                <div class="col">
+                    <input name="Name" class="form-control" required />
+                </div>
+                <div class="col">
+                    <select class="form-control" name="CategoryId">
+                        <option disabled selected>Выберите категорию</option>
+                        @foreach (Category category in ViewBag.Categories)
+                        {
+                            <option value="@category.Id">@category.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="col">
+                    <input name="PurchasePrice" class="form-control" required />
+                </div>
+                <div class="col">
+                    <input name="RetailPrice" class="form-control" required />
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-primary">Добавить</button>
+                </div>
+            </div>
+        </form>
+        @if (Model.Count() == 0)
+        {
+            <div class="row">
+                <div class="col text-center p-2">Нет данных</div>
+            </div>
+        }
+        else
+        {
+            @foreach (Product product in Model)
+            {
+                <div class="row р-2">
+                    <div class="col">@product.Name</div>
+                    <div class="col">@product.Category?.Name</div>
+                    <div class="col text-right">@product.PurchasePrice</div>
+                    <div class="col text-right">@product.RetailPrice</div>
+                    <div class="col">
+                        <form asp-action="DeleteProduct" method="post" onsubmit="return confirm('Вы уверены, что хотите удалить этот товар?');">
+                            <input type="hidden" name="Id" value="@product.Id">
+                            <a asp-action="UpdateProduct" asp-route-id="@product.Id" class="btn btn-outline-primary">Редактировать</a>
+                            <button type="submit" class="btn btn-outline-danger">Удалить</button>
+                        </form>
+                    </div>
+                </div>
+            }
+
+        }
+        <div class="text-center">
+            <a asp-action="UpdateAll" class="btn btn-primary">Редактировать все</a>
+        </div>
+    }
+    else
+    {
+        @await Html.PartialAsync("_InlineEditor", Model)
+
+    }
+</div>
