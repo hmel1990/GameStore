@@ -61,13 +61,14 @@ namespace GameStore.Repositories
         {
             Dictionary<int, Product> data = products.ToDictionary(e => e.Id);
             IEnumerable<Product> baseline = _context.Products.Where(e => data.Keys.Contains(e.Id)).ToList();
+            IEnumerable<Category> categories = _context.Categories.ToList();
 
             foreach (Product product in baseline)
             {
                 Product requestProduct = data[product.Id];
                 product.Name = requestProduct.Name;
                 product.CategoryId = requestProduct.CategoryId;
-                product.Category = _context.Categories.Find(requestProduct.CategoryId);
+                product.Category = categories.FirstOrDefault(c=>c.Id==product.CategoryId);
 
                 product.RetailPrice = requestProduct.RetailPrice;
                 product.PurchasePrice = requestProduct.PurchasePrice;
