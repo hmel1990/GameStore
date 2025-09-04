@@ -30,10 +30,28 @@ namespace GameStore.Repositories
             _context.SaveChanges();
         }
 
+
         public void DeleteCategory(Category category)
         {
             _context.Categories.Remove(category);
             _context.SaveChanges();
         }
+        public void UpdateAll(Category[] categories)
+        {
+            Dictionary<int, Category> data = categories.ToDictionary(e => e.Id);
+            IEnumerable<Category> baseline = _context.Categories.Where(e => data.Keys.Contains(e.Id)).ToList();
+
+            foreach (Category category in baseline)
+            {
+                Category requestCategory = data[category.Id];
+                category.Name = requestCategory.Name;
+                category.Description = requestCategory.Description;
+            }
+            _context.SaveChanges();
+        }
+
+        //===========================================================
+
+
     }
 }

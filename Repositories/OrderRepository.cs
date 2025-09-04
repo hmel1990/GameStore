@@ -41,5 +41,23 @@ namespace GameStore.Repositories
             _context.Orders.Update(order);
             _context.SaveChanges();
         }
+
+        public IEnumerable<ProductStatsViewModel> GetTopOrders()
+        {
+            var topProducts = _context.Orders
+                .SelectMany(o => o.Lines)
+                .GroupBy(line => line.Product)
+                .Select(group => new ProductStatsViewModel
+                {
+                    Product = group.Key,
+                    TotalQuantity = group.Sum(line => line.Quantity)
+                })
+                .OrderByDescending(p => p.TotalQuantity)
+                .Take(10)
+                .ToList();
+
+            return topProducts;
+        }
+
     }
 }

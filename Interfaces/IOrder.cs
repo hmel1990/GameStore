@@ -9,5 +9,7 @@ namespace GameStore.Interfaces
         void AddOrder(Order order);
         void UpdateOrder(Order order);
         void DeleteOrder(Order order);
+
+        IEnumerable<ProductStatsViewModel> GetTopOrders();
     }
 }

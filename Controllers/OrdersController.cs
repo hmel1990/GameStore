@@ -51,5 +51,12 @@ namespace GameStore.Controllers
             _orders.DeleteOrder(order);
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public IActionResult TopOrders()
+        {
+            var topProducts = _orders.GetTopOrders();
+            return View(topProducts);
+        }
     }
 }

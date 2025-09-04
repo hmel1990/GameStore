@@ -1,4 +1,6 @@
-﻿namespace GameStore.Models
+﻿using GameStore.Interfaces;
+
+namespace GameStore.Models
 {
     public class Order
     {
@@ -11,6 +13,5 @@
 
 
         public IEnumerable<OrderLine> Lines { get; set; }
-
     }
 }

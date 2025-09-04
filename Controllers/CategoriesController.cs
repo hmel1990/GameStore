@@ -39,5 +39,20 @@ namespace GameStore.Controllers
             _categories.DeleteCategory(category);
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public IActionResult UpdateAll()
+        {
+
+            ViewBag.UpdateAllCategories = true;
+            return View(nameof(Index), _categories.GetAllCategories());
+        }
+        [HttpPost]
+        public IActionResult UpdateAll(Category[] categories)
+        {
+
+            _categories.UpdateAll(categories);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
